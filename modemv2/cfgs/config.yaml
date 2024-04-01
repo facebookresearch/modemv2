@@ -1,0 +1,126 @@
+defaults:
+    - suite@_global_: franka
+    - override hydra/launcher: submitit_local
+
+# environment
+task: ???
+discount: 0.99
+img_size: ???
+frame_stack: 2
+action_repeat: 2
+train_steps: 100000
+
+# demonstrations
+demos: 5
+
+# planning
+iterations: ???
+num_samples: 510 #512
+num_elites: 64
+mixture_coef: 0.05
+min_std: 0.05
+temperature: 0.5
+momentum: 0.1
+
+# learning
+batch_size: ???
+horizon: 5
+reward_coef: 0.5
+value_coef: 0.1
+consistency_coef: 2
+rho: 0.5
+kappa: 0.1
+lr: ???
+std_schedule: linear(0.1, ${min_std}, 12500)
+horizon_schedule: linear(1, ${horizon}, 25000)
+per: true
+per_alpha: 0.6
+per_beta: 0.4
+grad_clip_norm: 10
+seed_steps: 5000
+update_freq: 2
+tau: 0.01
+
+# architecture
+num_channels: 32
+enc_dim: 256
+mlp_dim: 512
+latent_dim: 50
+
+# wandb (required: fill in your details)
+wandb_project: modemv2
+wandb_entity: palanc
+
+# misc
+seed: 1
+exp_name: default
+eval_freq: 2000
+eval_episodes: 30
+save_freq: 2000
+save_video: true
+save_model: true
+
+# convenience
+domain: ???
+task_title: ???
+device: ???
+obs_shape: ???
+action_shape: ???
+action_dim: ???
+state_dim: ???
+
+bc_only: false
+real_robot: false
+bc_model_fp: ???
+
+plan_policy: false
+bc_rollout: false
+bc_q_pol: false
+dense_reward: false
+gt_rollout: false
+num_cpu: 8
+left_crops: ???
+top_crops: ???
+
+success_mask_left: ???
+success_mask_right: ??? 
+success_mask_top: ??? 
+success_mask_bottom: ??? 
+success_thresh: ???
+success_uv: ???
+
+finger_noise: 0.0
+seed_train: false
+
+ensemble_size: 6
+val_min_w: 0.0
+val_mean_w: 1.0
+val_std_w: 0.0
+mix_schedule: false
+uncertainty_weighting: false
+vanilla_modem: false
+ignore_bc: false
+eval_dir: ???
+depth_success_thresh: ???
+reorient_pickup_height: ???
+reorient_drop_goal_x: ???
+reorient_drop_goal_y: ???
+reorient_knock_height: ???
+limit_mix_sched: false
+
+save_episodes: false
+
+torque_scale: 1.0
+torque_penalty: 0.0
+hydra:
+    job:
+        name: ${exp_name}
+    launcher:
+        cpus_per_task: ${num_cpu}
+        gpus_per_node: 1
+        tasks_per_node: 1
+        timeout_min: 4320
+        mem_gb: 700
+        name: ${hydra.job.name}
+        submitit_folder: ${hydra.sweep.dir}/.submitit/%j
+        partition: learnaccel

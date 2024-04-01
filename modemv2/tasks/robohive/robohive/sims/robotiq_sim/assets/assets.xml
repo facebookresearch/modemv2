@@ -1,0 +1,94 @@
+<mujocoinclude>
+<!-- =================================================
+    Copyright 2018 Vikash Kumar
+    Model   :: Franka (MuJoCoV2.0)
+    Author  :: Vikash Kumar (vikashplus@gmail.com)
+    source  :: https://github.com/vikashplus/robotiq_sim
+    License :: Under Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+====================================================== -->
+
+    <compiler angle="radian"/>
+    <option timestep="0.002"/>
+
+   <asset>
+        <mesh name="robotiq-2f-base" file="../robotiq_sim/meshes/robotiq-2f-base.stl" scale="0.001 0.001 0.001" />
+        <mesh name="robotiq-2f-driver" file="../robotiq_sim/meshes/robotiq-2f-driver.stl" scale="0.001 0.001 0.001" />
+        <mesh name="robotiq-2f-coupler" file="../robotiq_sim/meshes/robotiq-2f-coupler.stl" scale="0.001 0.001 0.001" />
+        <mesh name="robotiq-2f-follower" file="../robotiq_sim/meshes/robotiq-2f-follower.stl" scale="0.001 0.001 0.001" />
+        <mesh name="robotiq-2f-pad" file="../robotiq_sim/meshes/robotiq-2f-pad.stl" scale="0.001 0.001 0.001" />
+        <mesh name="robotiq-2f-spring_link" file="../robotiq_sim/meshes/robotiq-2f-spring_link.stl" scale="0.001 0.001 0.001" />
+    </asset>
+
+    <default>
+        <default class="robotiq2f85">
+            <joint damping=".1" pos="0 0 0" axis="1 0 0" limited="true" />
+            <geom rgba=".1 .1 .1 1" type="mesh" contype="0" conaffinity="0" group="1"/>
+            <default class="robotiq_col">
+                <geom rgba=".3 .4 .5 1" type="mesh" contype="1" conaffinity="0" group="3"/>
+            </default>
+            <default class="robotiq_pad_col">
+                <geom rgba=".3 .4 .5 1" type="mesh" contype="1" conaffinity="1" group="3" condim="4"/>
+            </default>
+        </default>
+    </default>
+
+    <contact>
+        <exclude body1='robotiq_2f_85_right_spring_link' body2='robotiq_2f_85_right_follower'/>
+        <exclude body1='robotiq_2f_85_left_spring_link' body2='robotiq_2f_85_left_follower'/>
+    </contact>
+
+    <sensor>
+        <jointpos name="robotiq_2f_85" joint="robotiq_2f_85_right_driver_joint"/>
+    </sensor>
+
+    <equality>
+        <connect anchor="0 0.037 0.043" body1="robotiq_2f_85_right_spring_link" body2="robotiq_2f_85_right_follower" name="robotiq_2f_85_right"/>
+        <connect anchor="0 0.037 0.043" body1="robotiq_2f_85_left_spring_link" body2="robotiq_2f_85_left_follower" name="robotiq_2f_85_left"/>
+    </equality>
+
+    <!-- ====== ACTUATION-Opt0: Joint constrainted: Joint mimic each other.  ====== -->
+    <equality>
+        <joint joint1="robotiq_2f_85_right_driver_joint" joint2="robotiq_2f_85_left_driver_joint"/>
+    </equality>
+    <equality>
+        <joint joint1="robotiq_2f_85_right_driver_joint" joint2="robotiq_2f_85_right_spring_link_joint"/>
+    </equality>
+    <equality>
+        <joint joint1="robotiq_2f_85_right_driver_joint" joint2="robotiq_2f_85_right_follower_joint" polycoef="0 -1 0 0 0" />
+    </equality>
+    <equality>
+        <joint joint1="robotiq_2f_85_left_driver_joint" joint2="robotiq_2f_85_left_spring_link_joint"/>
+    </equality>
+    <equality>
+        <joint joint1="robotiq_2f_85_left_driver_joint" joint2="robotiq_2f_85_left_follower_joint" polycoef="0 -1 0 0 0" />
+    </equality>
+    
+    <actuator>
+        <position name="robotiq_2f_85" joint="robotiq_2f_85_right_driver_joint" ctrlrange="0 1.0" ctrllimited="true"/>
+    </actuator>
+
+    <sensor>
+        <touch site="touch_sensor_left" name="touch_sensor_left" user="0 0 2"/>
+        <touch site="touch_sensor_right" name="touch_sensor_right" user="0 0 2"/>
+        <velocimeter site="palm_sensor_site" name="palm_velocimeter" />
+        <accelerometer site="palm_sensor_site" name="palm_accelerometer" />        
+    </sensor>
+
+    <!-- ====== ACTUATION-Opt1: Individually actuated: Uses twice as many actuators than hardware ======-->
+    <!-- <actuator>
+        <position name="robotiq_2f_85_right" joint="robotiq_2f_85_right_driver_joint" ctrlrange="0 1" ctrllimited="true"/>
+        <position name="robotiq_2f_85_left" joint="robotiq_2f_85_left_driver_joint" ctrlrange="0 1" ctrllimited="true"/>
+    </actuator> -->
+
+    <!-- ====== ACTUATION-Opt2: Tendon constrainted: Joints try to compensate for each other. We donot see this behavior in hardware ======-->
+    <!-- <tendon>
+        <fixed name="robotiq_2f_85_cplr">
+            <joint joint="robotiq_2f_85_right_driver_joint" coef="1"/>
+            <joint joint="robotiq_2f_85_left_driver_joint" coef="1"/>
+        </fixed>
+    </tendon>
+     <actuator>
+        <position name="robotiq_2f_85" tendon="robotiq_2f_85_cplr" ctrlrange="0 1" ctrllimited="true"/>
+    </actuator> -->
+
+</mujocoinclude>

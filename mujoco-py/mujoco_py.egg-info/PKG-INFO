@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: mujoco-py
+Version: 2.1.2.14
+Home-page: https://github.com/openai/mujoco-py
+Author: OpenAI Robotics Team
+Author-email: robotics@openai.com
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.6
+License-File: LICENSE.md
+Requires-Dist: glfw>=1.4.0
+Requires-Dist: numpy>=1.11
+Requires-Dist: Cython>=0.27.2
+Requires-Dist: imageio>=2.1.2
+Requires-Dist: cffi>=1.10
+Requires-Dist: fasteners~=0.15

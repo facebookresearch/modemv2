@@ -1,0 +1,16 @@
+<mujoco model="example">
+    <asset>
+        <texture type='skybox' builtin='gradient' rgb1='.8 .8 .8' rgb2='0 0 0' width='100' height='100'/>
+    </asset>
+
+    <visual>
+        <headlight ambient="0.50 0.50 0.50" diffuse="0.50 0.50 0.50" specular="0.50 0.50 0.50"/>
+    </visual>
+
+    <include file="../robotiq_sim/assets/assets.xml"/>
+
+    <worldbody>
+        <include file="../robotiq_sim/assets/chain.xml"/>
+    </worldbody>
+
+</mujoco>

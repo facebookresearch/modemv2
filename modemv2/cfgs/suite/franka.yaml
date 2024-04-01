@@ -1,0 +1,16 @@
+suite: franka
+iterations: 4
+episode_length: 50
+img_size: 0
+lr: 1e-3
+batch_size: 512
+demo_schedule: linear(0.75, 0.25, 50000)
+camera_views: [left_cam]
+left_crops: [0]
+top_crops: [0]
+success_mask_left: 0
+success_mask_right: 0
+success_mask_top: 0
+success_mask_bottom: 0
+success_thresh: 0.0
+success_uv: [0,0.55]
